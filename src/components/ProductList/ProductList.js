@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import ProductCard from "../ProductCard/ProductCard";
 import { Carousel as BootstrapCarousel } from "bootstrap";
+import { useWindowWidth } from "../../hooks/useWindowWidth";
 import "./ProductList.css";
 
 // API endpoint
@@ -17,6 +18,15 @@ function ProductList() {
 
   // Ref to the carousel element
   const carouselRef = useRef(null);
+
+  const width = useWindowWidth();
+
+  // Decide number of cards per slide based on screen width
+  let cardsPerSlide;
+  if (width >= 992) cardsPerSlide = 4; // LG
+  else if (width >= 768) cardsPerSlide = 3; // MD/tablet
+  else if (width >= 403) cardsPerSlide = 2;
+  else cardsPerSlide = 1; // SM/phone
 
   // Fetch offers from API
   const fetchOffers = async () => {
@@ -100,9 +110,15 @@ function ProductList() {
 
   // Split into chunks of 4 for the carousel
   const chunkedDeals = [];
-  for (let i = 0; i < topDeals.length; i += 4) {
-    chunkedDeals.push(topDeals.slice(i, i + 4));
+  for (let i = 0; i < topDeals.length; i += cardsPerSlide) {
+    chunkedDeals.push(topDeals.slice(i, i + cardsPerSlide));
   }
+
+  // Main product grid remains responsive with Bootstrap
+  let productColClass;
+  if (width >= 992) productColClass = "col-lg-3 col-md-4 col-6"; // 4 per row
+  else if (width >= 768) productColClass = "col-md-4 col-6"; // 3 per row
+  else if (width >= 403) productColClass = "col-6"; // 2 per row
 
   // Render product grid
   const renderProductGrid = () => {
@@ -116,7 +132,7 @@ function ProductList() {
           {filteredProducts.map((product) => (
             <div
               key={`${product.name}-${product.supermarket}`} // stable unique key
-              className="col-lg-3 col-md-3 col-6 mb-4"
+              className={`${productColClass} mb-4`}
             >
               <ProductCard product={product} />
             </div>
@@ -176,46 +192,51 @@ function ProductList() {
 
       {/* Top Deals Carousel */}
       {chunkedDeals.length > 0 && (
-        <div
-          id="topDealsCarousel"
-          ref={carouselRef}
-          className="carousel slide mb-4"
-        >
-          <h4 className="mb-3">🔥 Top Deals</h4>
-          <div className="carousel-inner">
-            {chunkedDeals.map((group, index) => (
-              <div
-                className={`carousel-item ${index === 0 ? "active" : ""}`}
-                key={`carousel-group-${group.map((product) => product.name).join("-")}`} // unique key for the group
-              >
-                <div className="row justify-content-center">
-                  {group.map((product) => (
-                    <div
-                      className="col-lg-3 col-md-3 col-6 mb-4"
-                      key={`${product.name}-${product.supermarket}`} // unique key per product
-                    >
-                      <ProductCard product={product} />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
+        <div className="mb-4">
+          {/* Heading outside carousel */}
+          <h4 className="mb-3 mt-5">🔥 Top Deals</h4>
 
-          <button
-            className="carousel-control-prev carousel-dark-btn"
-            type="button"
-            data-bs-slide="prev"
+          <div
+            id="topDealsCarousel"
+            ref={carouselRef}
+            className="carousel slide"
           >
-            <span className="carousel-control-prev-icon"></span>
-          </button>
-          <button
-            className="carousel-control-next carousel-dark-btn"
-            type="button"
-            data-bs-slide="next"
-          >
-            <span className="carousel-control-next-icon"></span>
-          </button>
+            <div className="carousel-inner">
+              {chunkedDeals.map((group, index) => (
+                <div
+                  className={`carousel-item ${index === 0 ? "active" : ""}`}
+                  key={`carousel-group-${group.map((product) => product.name).join("-")}`} // unique key
+                >
+                  <div className="row justify-content-center">
+                    {group.map((product) => (
+                      <div
+                        className={`${productColClass} mb-4`}
+                        key={`${product.name}-${product.supermarket}`} // unique key per product
+                      >
+                        <ProductCard product={product} />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Carousel buttons */}
+            <button
+              className="carousel-control-prev carousel-dark-btn"
+              type="button"
+              data-bs-slide="prev"
+            >
+              <span className="carousel-control-prev-icon"></span>
+            </button>
+            <button
+              className="carousel-control-next carousel-dark-btn"
+              type="button"
+              data-bs-slide="next"
+            >
+              <span className="carousel-control-next-icon"></span>
+            </button>
+          </div>
         </div>
       )}
 

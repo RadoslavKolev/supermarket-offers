@@ -22,3 +22,17 @@
   height: 50px;
   top: 45%;
 }
+
+/* Ensure carousel takes full height of its content */
+#topDealsCarousel {
+  position: relative; /* required for absolute buttons */
+}
+
+/* Center carousel controls vertically */
+#topDealsCarousel .carousel-control-prev,
+#topDealsCarousel .carousel-control-next {
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+}

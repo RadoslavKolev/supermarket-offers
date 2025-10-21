@@ -25,7 +25,7 @@ function ProductList() {
   let cardsPerSlide;
   if (width >= 992) cardsPerSlide = 4; // LG
   else if (width >= 768) cardsPerSlide = 3; // MD/tablet
-  else if (width >= 403) cardsPerSlide = 2;
+  else if (width >= 430) cardsPerSlide = 2;
   else cardsPerSlide = 1; // SM/phone
 
   // Fetch offers from API
@@ -118,7 +118,8 @@ function ProductList() {
   let productColClass;
   if (width >= 992) productColClass = "col-lg-3 col-md-4 col-6"; // 4 per row
   else if (width >= 768) productColClass = "col-md-4 col-6"; // 3 per row
-  else if (width >= 403) productColClass = "col-6"; // 2 per row
+  else if (width >= 430) productColClass = "col-6"; // 2 per row
+  else productColClass = "col-12"; // 1 per row
 
   // Render product grid
   const renderProductGrid = () => {

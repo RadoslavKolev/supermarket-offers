@@ -1,0 +1,24 @@
+/* Horizontal scroll for Top Deals - currently not included */
+.top-deals-row {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 1rem;
+}
+
+/* Darker carousel buttons */
+.carousel-dark-btn .carousel-control-prev-icon,
+.carousel-dark-btn .carousel-control-next-icon {
+  filter: invert(1); /* make icon dark */
+  background-color: rgba(0, 0, 0, 0.4); /* semi-transparent dark circle */
+  border-radius: 50%;
+  padding: 10px;
+}
+
+/* Optional: slightly larger clickable area on mobile */
+.carousel-control-prev,
+.carousel-control-next {
+  width: 50px;
+  height: 50px;
+  top: 45%;
+}

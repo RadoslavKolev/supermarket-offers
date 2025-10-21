@@ -1,4 +1,4 @@
-# Live Demo - https://supermarket-offers.vercel.app/
+# Live Demo - <a href="https://supermarket-offers.vercel.app/" target="_blank">https://supermarket-offers.vercel.app/</a>
 
 # Getting Started with Create React App
 
